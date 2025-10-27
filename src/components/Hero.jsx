@@ -1,17 +1,29 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Spline from '@splinetool/react-spline';
 
+const phrases = [
+  'Ship faster with autonomous workflows',
+  'Reduce toil with AI decisioning',
+  'Orchestrate anything with ease',
+];
+
 const Hero = () => {
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => (i + 1) % phrases.length), 2600);
+    return () => clearInterval(id);
+  }, []);
+
   return (
-    <section className="relative min-h-[90vh] w-full overflow-hidden bg-[#0b0b12] text-white">
+    <section className="relative min-h-[100vh] w-full overflow-hidden bg-[#0b0b12] text-white">
       {/* Background gradient accents */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-gradient-to-br from-fuchsia-600/30 via-purple-600/20 to-indigo-600/20 blur-3xl" />
         <div className="absolute -bottom-32 -right-24 h-[28rem] w-[28rem] rounded-full bg-gradient-to-tr from-indigo-600/20 via-purple-600/20 to-fuchsia-600/30 blur-3xl" />
       </div>
 
-      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6 pt-20 md:pt-24">
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6 pt-36 md:pt-40">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -29,17 +41,23 @@ const Hero = () => {
           className="text-center text-4xl font-extrabold leading-tight tracking-tight md:text-6xl"
         >
           Automate the Future
-          <span className="bg-gradient-to-r from-fuchsia-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent"> with AI</span>
+          <span className="bg-[linear-gradient(90deg,#f0abfc,45%,#a78bfa,65%,#818cf8)] bg-clip-text text-transparent"> with AI</span>
         </motion.h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.9 }}
-          className="mt-4 max-w-2xl text-center text-base text-white/70 md:text-lg"
-        >
-          Build, orchestrate, and scale automations across your stack. Intelligent triggers, no-code workflows, and realtime insights — all in one sleek platform.
-        </motion.p>
+        <div className="relative mt-4 h-8 md:h-9">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={index}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.5 }}
+              className="max-w-2xl px-2 text-center text-sm text-white/70 md:text-lg"
+            >
+              {phrases[index]}
+            </motion.p>
+          </AnimatePresence>
+        </div>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
@@ -64,14 +82,17 @@ const Hero = () => {
       </div>
 
       {/* Spline Scene */}
-      <div className="relative mt-10 h-[520px] w-full md:mt-14">
+      <div className="relative mt-12 h-[560px] w-full md:mt-16">
         <Spline
-          scene="https://prod.spline.design/EF7JOSsHLk16Tlw9/scene.splinecode"
+          scene="https://prod.spline.design/UngO8SNLfLcyPG7O/scene.splinecode"
           style={{ width: '100%', height: '100%' }}
         />
         {/* Soft gradient overlay to blend with background without blocking interaction */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0b12] via-transparent to-transparent" />
       </div>
+
+      {/* Subtle bottom glow */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-fuchsia-500/10 via-purple-500/5 to-transparent" />
     </section>
   );
 };
